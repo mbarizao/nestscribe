@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/assets/styles.css" rel="stylesheet">
+  <title>API Documentation</title>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+  <div class="container mx-auto p-8">
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold text-blue-600">API Documentation</h1>
+      <p class="text-gray-700 mt-2">This documentation provides details about the available endpoints in your application.</p>
+    </header>
+
+    <!-- Documentation Content -->
+    <section>
+      <div id="docs-container" class="space-y-6">
+        <!-- Endpoints will be dynamically injected here -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Assuming the documentation JSON is served as a global variable
+    const docsJson = window.__DOCS_JSON__ || { endpoints: [] };
+
+    const container = document.getElementById('docs-container');
+
+    docsJson.endpoints.forEach((endpoint) => {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg shadow p-6';
+
+      card.innerHTML = `
+        <h2 class="text-xl font-semibold text-blue-500">${endpoint.method.toUpperCase()} ${endpoint.path}</h2>
+        <p class="text-gray-700 mt-2">${endpoint.description || 'No description provided'}</p>
+        <div class="mt-4">
+          <h3 class="font-semibold">Parameters:</h3>
+          <ul class="list-disc list-inside">
+            ${(endpoint.parameters || [])
+              .map(
+                (param) =>
+                  `<li><strong>${param.name}</strong>: ${param.type} - ${param.description || ''}</li>`
+              )
+              .join('')}
+          </ul>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
